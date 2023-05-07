@@ -51,8 +51,13 @@ client.on('interactionCreate', async (interaction) => {
       .setDescription('Have a nice day');
     await interaction.channel.send({ embeds: [cancelEmbed] });
     await interaction.update({ content: 'Command canceled', components: [] });
-  } else if (interaction.customId === 'repo') {
-    await interaction.update({ content: 'Repository opened', components: [] });
+  } else if (interaction.customId === 'guide') {
+    const guideEmbed = new EmbedBuilder()
+      .setColor(0x0099FF)
+      .setTitle('Guide')
+      .setDescription('This bot contains 4 slash commands that will reply with a pre-determined string, 1 slash command that echoes a user-input, and 1 slash command that contains buttons');
+    await interaction.channel.send({ embeds: [guideEmbed] });
+    await interaction.update({ content: 'Guide opened' });
   }
 });
 
