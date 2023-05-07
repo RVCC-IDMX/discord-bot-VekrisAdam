@@ -1,6 +1,11 @@
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable no-restricted-syntax */
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const {
+  Client, Collection, GatewayIntentBits, EmbedBuilder,
+} = require('discord.js');
 const { token } = require('./config.json');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -35,5 +40,20 @@ for (const file of eventFiles) {
     client.on(event.name, (...args) => event.execute(...args));
   }
 }
+
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isButton()) return;
+
+  if (interaction.customId === 'cancel') {
+    const cancelEmbed = new EmbedBuilder()
+      .setColor(0x0099FF)
+      .setTitle('Command canceled')
+      .setDescription('Have a nice day');
+    await interaction.channel.send({ embeds: [cancelEmbed] });
+    await interaction.update({ content: 'Command canceled', components: [] });
+  } else if (interaction.customId === 'repo') {
+    await interaction.update({ content: 'Repository opened', components: [] });
+  }
+});
 
 client.login(token);
